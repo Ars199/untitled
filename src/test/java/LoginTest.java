@@ -1,3 +1,4 @@
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -6,20 +7,39 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.concurrent.TimeUnit;
 
 public class LoginTest {
-    /**
-     * осуществление первоначальной настройки
-     */
-    //@BeforeClass
-    @Test
-    public void setup() {
-        //определение пути до драйвера и его настройка
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\WebDrivers\\chromedriver.exe");
-        //создание экземпляра драйвера
-        WebDriver driver = new ChromeDriver();
-        //окно разворачивается на полный экран
-        driver.manage().window().maximize();
-        //задержка на выполнение теста = 10 сек.
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("https://passport.yandex.ru/auth");
-    }
+	public static LoginPage loginPage;
+	public static WebDriver driver;
+
+	@BeforeClass
+	public static void setup() {
+
+		System.setProperty("webdriver.chrome.driver", "D:\\atst\\resources\\chromedriver.exe");
+
+		WebDriver driver = new ChromeDriver();
+
+		driver.manage().window().maximize();
+
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		// driver.get(ConfProperties.getProperty("chromedriver"));
+		try {
+			driver.get("https://172.30.71.134/siebel/app/fins/rus");
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("Server is down");
+			driver.close();
+		}
+	}
+
+	@Test
+	public void loginTest() {
+		loginPage.inputLogin(ConfProperties.getProperty("login"));
+		loginPage.inputPassw(ConfProperties.getProperty("passw"));
+		loginPage.clickBtnEnter();
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		driver.quit();
+	}
 }

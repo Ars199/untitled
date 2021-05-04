@@ -16,19 +16,11 @@ public class LoginTest {
 		System.setProperty("webdriver.chrome.driver", "D:\\atst\\resources\\chromedriver.exe");
 
 		WebDriver driver = new ChromeDriver();
+		loginPage = new LoginPage(driver);
 
 		driver.manage().window().maximize();
-
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.get(ConfProperties.getProperty("chromedriver"));
-		try {
-			driver.get("https://172.30.71.134/siebel/app/fins/rus");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		} finally {
-			System.out.println("Server is down");
-			driver.close();
-		}
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.get("https://172.30.71.134/siebel/app/fins/rus");
 	}
 
 	@Test
@@ -38,8 +30,13 @@ public class LoginTest {
 		loginPage.clickBtnEnter();
 	}
 
+	@Test
+	public void siteMapTest() {
+		loginPage.clickBtnSiteMap();
+	}
+
 	@AfterClass
 	public static void tearDown() {
-		driver.quit();
+		driver.close();
 	}
 }
